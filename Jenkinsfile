@@ -1,43 +1,21 @@
 pipeline {
-
-  environment {
-    dockerimagename = "jvelizvid/kubernetes-demo"
-    dockerImage = ""
-  }
-
   agent any
-
   stages {
-
-    stage('Build image') {
-      steps{
-        script {
-          dockerImage = docker.build dockerimagename
+    stage('Build') {
+      agent {
+        docker {
+          image 'node:14-buster'
         }
       }
-    }
-
-    stage('Pushing Image') {
-      environment {
-               registryCredential = 'dockerhub-credentials'
-           }
-      steps{
-        script {
-          docker.withRegistry( 'https://registry.hub.docker.com', registryCredential ) {
-            dockerImage.push("latest")
-          }
-        }
-      }
-    }
-
-    stage('Deploying React.js container to Kubernetes') {
       steps {
-        script {
-          kubernetesDeploy(configs: "deployment.yaml", "service.yaml")
-        }
+        sh 'yarn install --frozen-lockfile'
+        sh 'yarn run build'
+        sh 'tar -cvf builtSources.tar ./dist/'
+        stash(name: 'dist-files', includes: 'builtSources.tar', useDefaultExcludes: true)
       }
     }
-
   }
-
+  environment {
+    imageName = 'example-service'
+  }
 }
