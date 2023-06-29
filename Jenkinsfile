@@ -32,6 +32,6 @@ pipeline {
     }
   }
   environment {
-    imageName = 'kubernetes-demo'
+    imageName = 'jvelizvid/kubernetes-demo'
   }
 }
