@@ -1,5 +1,5 @@
 #It will use node:19-alpine3.16 as the parent image for building the Docker image
-FROM node:14
+FROM node:18.16.0
 
 #It will create a working directory for Docker. The Docker image will be created in this working directory.
 WORKDIR /react-app
