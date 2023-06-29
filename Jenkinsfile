@@ -30,6 +30,13 @@ pipeline {
         }
       }
     }
+    stage('Deploy') {
+      steps {
+        script {
+          kubernetesDeploy(configs: "deployment.yaml", "service.yaml")
+        }
+      }
+    }
   }
   environment {
     imageName = 'jvelizvid/kubernetes-demo'
