@@ -2,13 +2,10 @@ pipeline {
   agent any
   stages {
     stage('Build') {
-      agent {
-        dockerfile {
-          filename 'Dockerfile'
-        }
-      }
       steps {
-        echo 'Build stage'
+        script {
+            def customImage = docker.build imageName
+        }
       }
     }
     stage('Publish') {
