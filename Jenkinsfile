@@ -35,8 +35,10 @@ pipeline {
         }
       }
       steps {
-        script {
-          kubernetesDeploy(configs: "deployment.yaml", "service.yaml", kubeconfigId: "mykubeconfig")
+        container('kubectl') {
+          script {
+            kubernetesDeploy(configs: "deployment.yaml", "service.yaml", kubeconfigId: "mykubeconfig")
+          }
         }
       }
     }
