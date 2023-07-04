@@ -1,17 +1,9 @@
-pipeline {
-  agent {
-    kubernetes {
-      	cloud 'kubernetes'
-      	defaultContainer 'jnlp'
-      }
+stage ('Deploy to Cluster') {
+    steps {
+        //withAWS(role: "Jenkins", roleAccount: '164135465533') {
+        sh "aws eks update-kubeconfig --region eu-west-2 --name ekscluster"
+       // sh "aws eks update-kubeconfig --region eu-west-1 --name switch-arca-qa-cluster"
+        sh " envsubst < ${WORKSPACE}/deploy.yaml | ./kubectl apply -f - "
+        //}
     }
-  stages {
-    stage('Deploy App') {
-      steps {
-        script {
-          kubernetesDeploy(configs: "deployment.yaml", "service.yaml", kubeconfigId: "mykubeconfig")
-        }
-      }
-    }
-  }
 }
