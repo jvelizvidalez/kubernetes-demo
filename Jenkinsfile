@@ -28,16 +28,12 @@ pipeline {
       }
     }
     stage('Deploy') {
-      agent {
-      kubernetes {
-          cloud 'kubernetes'
-          defaultContainer 'jnlp'
-        }
+      environment {
+          KUBECONFIG = credentials('mykubeconfig')
+          K8S_NAMESPACE = 'jenkins'
       }
       steps {
-        script {
-          kubernetesDeploy(configs: "deployment.yaml", "service.yaml", kubeconfigId: "mykubeconfig")
-        }
+          sh kubectl --kubeconfig=${KUBECONFIG} apply -f deployment.yaml --namespace=${K8S_NAMESPACE}
       }
     }
   }
