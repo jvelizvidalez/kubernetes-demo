@@ -29,7 +29,10 @@ pipeline {
     }
     stage('Deploy') {
       steps {
-          powershell 'kubectl apply -f deployment.yaml --namespace jenkins'
+        withKubeConfig([credentialsId: 'mykubeconfig', serverUrl: '']) {
+            sh 'kubectl apply -f deployment.yaml'
+            sh 'kubectl apply -f service.yaml'
+        }
       }
     }
   }
