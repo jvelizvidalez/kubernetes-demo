@@ -29,7 +29,7 @@ pipeline {
     }
     stage('Deploy') {
       steps {
-        withKubeConfig([credentialsId: 'mykubeconfig', serverUrl: '']) {
+        withKubeConfig([credentialsId: 'kubeconfig', serverUrl: '']) {
             powershell 'kubectl apply -f deployment.yaml'
             powershell 'kubectl apply -f service.yaml'
         }
